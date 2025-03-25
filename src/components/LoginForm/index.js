@@ -8,6 +8,7 @@ function LoginForm() {
     const [email , setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [errorMsg, SetErrorMsg] = useState('')
+    
      
     const navigate = useNavigate()
 
@@ -20,27 +21,30 @@ function LoginForm() {
        SetErrorMsg(message)
     }
 
+    const validateForm = () => {
+        if (!email || !password) {
+            SetErrorMsg('Please fill in all fields')
+            return false
+        }
+        return true
+    }
+
     const handleSubmit = async (e) => {
-       console.log('Login Button clicked')
-       e.preventDefault() 
-       const userDetails = { email, password}
-       try{
-        const response = await axios.post('https://backendmap-4.onrender.com/api/login', userDetails, {
-            headers: { 'Content-Type': 'application/json'}
-           })
-    
-           console.log(response)
-           
-           if(response.status === 200) {
-              loginSuccess(response.data.token)
-            } else {
-             loginFailure(response.data.message)
-           }
-       } catch(err){
-        console.log(`Login Error: ${err}`)
-        loginFailure(err.response?.data?.message)
-       }
+       e.preventDefault()
+       if (!validateForm()) return
+
        
+       try {
+         const response = await axios.post('https://backendmap-4.onrender.com/api/login', 
+           { email, password },
+           { headers: { 'Content-Type': 'application/json'} }
+         )
+         if(response.status === 200) {
+            loginSuccess(response.data.token)
+         }
+       } catch(err) {
+         loginFailure(err.response?.data?.message || 'Login failed')
+       } 
     }
 
   return (

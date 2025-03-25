@@ -1,23 +1,34 @@
 import styled from "styled-components";
 
 export const WrapperContainer = styled.div`
-overflow-x: hidden;
+  width: 100%;
 `
 
 export const DashBoardContainer = styled.div`
   height: 90vh;
   width: 100%;
-  overflow-x: hidden;
+  max-width: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   background-color: #282323;
   padding: 10px;
 
   @media (max-width: 768px) {
-    height: auto;
-    padding: 5px;
     height: 94vh;
+    padding: 5px;
   }
 `;
+
+export const LoaderContainer = styled.div`
+  height: 90vh; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #282323;
+  @media (max-width: 768px) {
+    height: 94vh;
+  }
+`
 
 export const SubHeading = styled.h2`
   font-size: 28px;
@@ -40,11 +51,14 @@ export const ListContainer = styled.div`
   gap: 20px;
   margin-top: 30px;
   margin-left: 40px;
-  width: 100%;
+  width: calc(100% - 80px);
+  overflow-x: hidden;
 
   @media (max-width: 768px) {
     margin-left: 5px;
     margin-right: 5px;
+    width: calc(100% - 10px);
+    flex-wrap: wrap;
   }
 `;
 
@@ -60,7 +74,7 @@ export const LocationContainer = styled.div`
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
     width: 90%;
-    margin-left: 20px;
+    margin-left: 40px;
     gap: 5px;
   }
 
@@ -104,9 +118,10 @@ export const LocationCards = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: 90%;
+    width: 80%;
     height: auto;
     margin-top: 15px;
+    margin-left: 15px;
   }
 `;
 

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import NavBar from '../NavBar'
-import { Cards, CardsTitle, Count, DashBoardContainer, ListContainer, SubHeading, LocationCards, LocationImage, LocationContainer, MemberCount, LocationName, PlaceNames, WrapperContainer } from './styledComponents'
-import { Link, useNavigate } from 'react-router-dom'
+import { Cards, CardsTitle, Count, DashBoardContainer, ListContainer, SubHeading, LocationCards, LocationImage, LocationContainer, MemberCount, LocationName, PlaceNames, WrapperContainer, LoaderContainer } from './styledComponents'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { ThreeDots } from 'react-loader-spinner'
 
 function DashBoard() {
    
@@ -11,9 +12,10 @@ function DashBoard() {
   const [activeLocation, setActiveLocation]  = useState(0)
   const [totalMember, setTotalMember] = useState(0)
   const [locations, setlocations] = useState([])
+  const [isLoading, SetIsLoading] = useState(true)
   
     
-  const navigate = useNavigate()  
+   
   const token = Cookies.get('token')
   
   useEffect(() => {
@@ -39,10 +41,12 @@ function DashBoard() {
                    setTotalMember(prevstate => prevstate + data.team_member)
                  }
                 ))
+                SetIsLoading(false)
             }
             
         }catch(err) {
             console.error(err)
+            SetIsLoading(false)
         }
     }
     fetchData()
@@ -51,7 +55,7 @@ function DashBoard() {
   return (
     <WrapperContainer>
       <NavBar /> 
-      <DashBoardContainer>
+      { !isLoading && <DashBoardContainer>
         <SubHeading>DashBoard</SubHeading>
         <ListContainer>
             <Cards>
@@ -87,7 +91,17 @@ function DashBoard() {
             
         </LocationContainer>
 
-      </DashBoardContainer>
+      </DashBoardContainer>}
+      {isLoading && 
+        <LoaderContainer>  
+            <ThreeDots 
+            height="80" 
+            width="80" 
+            color="#FFFFFF"
+            ariaLabel="loading"
+        />
+        </LoaderContainer>
+      }
     </WrapperContainer>
   )
 }

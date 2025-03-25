@@ -6,6 +6,8 @@ import { Icon } from 'leaflet';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie'
+import { ThreeDots } from 'react-loader-spinner';
+import { LoaderContainer } from '../DashBoard/styledComponents';
 
 
 function Map() {
@@ -13,12 +15,18 @@ function Map() {
  
  
   const [mapLocation, setMapLocation] = useState({})
+  const [error, setError] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   const token = Cookies.get('token')
+
+  const navigate = useNavigate()
 
   useEffect(() => {
       const fetchMapData = async () => {
         try{
+          setIsLoading(true)
+          setError(null)
           const response = await axios.get('https://backendmap-4.onrender.com/api/map', 
             {
             headers: {
@@ -29,14 +37,25 @@ function Map() {
           if(response.status === 200){
             setMapLocation(response.data.location[id-1])
           }
-      }catch(err) {
+        } catch(err) {
+          setError(err.response?.data?.message || 'Failed to load map data')
           console.error(err)
+        } finally {
+          setIsLoading(false)
+        }
       }
-    }
-    fetchMapData()
-  }, [])
+      fetchMapData()
+  }, [id, token])
 
-  const navigate = useNavigate()
+  if (isLoading) return <LoaderContainer> <ThreeDots 
+              height="80" 
+              width="80" 
+              color="#FFFFFF"
+              ariaLabel="loading"
+          /></LoaderContainer>
+  if (error) return <div>Error: {error}</div>
+
+  
 
   const customIcon = new Icon({
     iconUrl : require('../../mark-location.png'),
@@ -93,4 +112,3 @@ function Map() {
 }
 
 export default Map
-  
