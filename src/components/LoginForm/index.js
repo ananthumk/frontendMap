@@ -54,13 +54,13 @@ function LoginForm() {
             <FormContainer onSubmit={handleSubmit}>
                 <InputContainers 
                     type="email" 
-                    placeholder="example@gmail.com" 
+                    placeholder="test@test.com" 
                     value={email} 
                     onChange={(e) => setEmail(e.target.value) }
                 />
                 <InputContainers 
                     type="password" 
-                    placeholder='Enter your password' 
+                    placeholder='12345678' 
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 
                 />
